@@ -1,146 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapeo Territorial - San Pedro de los Milagros</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f9;
-      color: #333;
-      margin: 0;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #1a365d;
-      margin-bottom: 30px;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease-in-out;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-    }
-
-    .card-content {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .card-title {
-      font-size: 1.15rem;
-      font-weight: bold;
-      color: #2b6cb0;
-      margin-bottom: 10px;
-    }
-
-    .card-text {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      color: #4a5568;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>San Pedro de los Milagros: Cartografía del Desarrollo Territorial</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { display: flex; flex-direction: column; height: 100vh; background-color: #f4f6f4; color: #2c3e50; overflow: hidden; }
+        header { background-color: #2d4030; color: #ffffff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 1000; }
+        .header-title h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+        .header-title p { font-size: 0.85rem; color: #c2d4c5; }
+        .header-badge { background-color: #3e5642; padding: 8px 14px; border-radius: 6px; text-align: right; border: 1px solid #506d55; }
+        .header-badge .course { font-size: 0.75rem; font-weight: 600; color: #e0ebd3; text-transform: uppercase; letter-spacing: 0.5px; }
+        .header-badge .author { font-size: 0.85rem; font-weight: 500; color: #ffffff; }
+        main { display: flex; flex: 1; position: relative; height: calc(100vh - 68px); }
+        #map-container { flex: 1; position: relative; height: 100%; }
+        #map { width: 100%; height: 100%; }
+        .map-nav { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 900; display: flex; align-items: center; gap: 16px; backdrop-filter: blur(4px); border: 1px solid #e0e0e0; }
+        .nav-btn { background: #ffffff; border: 1px solid #d0d7de; padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; color: #24292f; }
+        .nav-btn:hover:not(:disabled) { background: #f3f4f6; border-color: #0969da; color: #0969da; }
+        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .point-indicator { font-size: 0.9rem; font-weight: 700; color: #1f2328; min-width: 100px; text-align: center; }
+        .sidebar { width: 420px; background: #ffffff; border-left: 1px solid #e1e4e8; padding: 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; box-shadow: -2px 0 12px rgba(0,0,0,0.05); }
+        .category-badge { align-self: flex-start; background-color: #3b5240; color: #ffffff; font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.6px; }
+        .sidebar h2 { font-size: 1.4rem; color: #1a261c; line-height: 1.25; }
+        .sidebar-img { width: 100%; height: 210px; object-fit: cover; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .sidebar-desc { font-size: 0.92rem; line-height: 1.6; color: #4a5568; text-align: justify; }
+        .sidebar-meta { margin-top: auto; padding-top: 16px; border-top: 1px solid #edf2f7; font-size: 0.8rem; color: #718096; }
+    </style>
 </head>
 <body>
-
-  <h1>Mapa Parlante y Territorial - San Pedro de los Milagros</h1>
-
-  <div class="grid-container">
-
-    <!-- 1. Parque Principal y Basílica -->
-    <div class="card">
-      <img src="image_7c3aeb.jpg" alt="Parque Principal y Basílica Señor de los Milagros">
-      <div class="card-content">
-        <div class="card-title">1. Parque Principal y Basílica Señor de los Milagros</div>
-        <div class="card-text">
-          Representa el corazón cultural, religioso y el espacio público de encuentro socio-espacial más representativo del municipio.
+    <header>
+        <div class="header-title">
+            <h1>San Pedro de los Milagros: Cartografía del Desarrollo Territorial</h1>
+            <p>Un recorrido por el territorio, las vías de conectividad y la garantía de derechos humanos en el Norte Antioqueño.</p>
         </div>
-      </div>
-    </div>
-
-    <!-- 2. Corredor Vial Principal -->
-    <div class="card">
-      <img src="image_7c9484.png" alt="Corredor Vial Principal">
-      <div class="card-content">
-        <div class="card-title">2. Corredor Vial Principal (Conectividad y Movilidad)</div>
-        <div class="card-text">
-          La carretera principal de acceso representa la infraestructura básica que conecta a San Pedro de los Milagros con la subregión del Valle de Aburrá. Mantener la vía en condiciones óptimas es un requisito fundamental para garantizar la libre movilidad, el transporte de insumos médicos y alimentarios, y el ejercicio pleno del derecho al trabajo de la población campesina.
+        <div class="header-badge">
+            <div class="course">Desarrollo humano y formación sociopolítica</div>
+            <div class="author">Carol Dayanna Guzmán Gómez</div>
         </div>
-      </div>
-    </div>
-
-    <!-- 3. Zona Rural y Fincas Lecheras -->
-    <div class="card">
-      <img src="image_7c955c.jpg" alt="Zona Rural y Fincas Lecheras">
-      <div class="card-content">
-        <div class="card-title">3. Zona Rural, Veredas y Fincas Lecheras</div>
-        <div class="card-text">
-          Espacio productivo y territorial fundamental para la economía local, el trabajo campesino y la seguridad alimentaria de la región.
+    </header>
+    <main>
+        <div id="map-container">
+            <div id="map"></div>
+            <div class="map-nav">
+                <button class="nav-btn" id="prev-btn" onclick="changePoint(-1)">&larr; Anterior</button>
+                <div class="point-indicator" id="point-counter">Punto 1 de 6</div>
+                <button class="nav-btn" id="next-btn" onclick="changePoint(1)">Siguiente &rarr;</button>
+            </div>
         </div>
-      </div>
-    </div>
+        <aside class="sidebar">
+            <div class="category-badge" id="card-category">PATRIMONIO / COHESIÓN SOCIAL</div>
+            <h2 id="card-title">Cargando...</h2>
+            <img id="card-image" class="sidebar-img" src="" alt="Punto cartográfico">
+            <p class="sidebar-desc" id="card-desc">Cargando información...</p>
+            <div class="sidebar-meta" id="card-meta">Enfoque...</div>
+        </aside>
+    </main>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const points = [
+            {
+                title: "1. Parque Principal y Basílica Señor de los Milagros",
+                category: "PATRIMONIO / COHESIÓN SOCIAL",
+                coords: [6.460833, -75.555000],
+                image: "basilica 2.jpg",
+                description: "Representa el corazón cultural, religioso y el espacio público de encuentro socio-espacial más representativo del municipio.",
+                meta: "Enfoque: Derecho a la identidad cultural, reunión pacífica y desarrollo comunitario."
+            },
+            {
+                title: "2. Vía Principal de Acceso (Conectividad y Movilidad)",
+                category: "MOVILIDAD Y CONECTIVIDAD",
+                coords: [6.463000, -75.553500],
+                image: "via 1.png",
+                description: "La carretera principal de acceso representa la infraestructura básica que conecta a San Pedro de los Milagros con la subregión del Valle de Aburrá. Mantener la vía en condiciones óptimas es un requisito fundamental para garantizar la libre movilidad, el transporte de insumos médicos y alimentarios, y el ejercicio pleno del derecho al trabajo de la población campesina.",
+                meta: "Enfoque: Libre circulación, conectividad territorial y acceso a servicios."
+            },
+            {
+                title: "3. Zona Rural, Veredas y Fincas Lecheras",
+                category: "DESARROLLO RURAL Y ECONOMÍA LOCAL",
+                coords: [6.472000, -75.545000],
+                image: "fincas 3.jpg",
+                description: "Espacio productivo y territorial fundamental para la economía local, el trabajo campesino y la seguridad alimentaria de la región.",
+                meta: "Enfoque: Soberanía alimentaria, desarrollo rural y trabajo digno."
+            },
+            {
+                title: "4. Alcaldía Municipal (Gestión e Institucionalidad)",
+                category: "INSTITUCIONALIDAD Y PARTICIPACIÓN",
+                coords: [6.461200, -75.555500],
+                image: "comunal 4.jpg",
+                description: "Centro de la gestión pública local e infraestructura gubernamental enfocada en velar por el desarrollo y los derechos de los ciudadanos.",
+                meta: "Enfoque: ODS 16 - Instituciones sólidas, transparencia y gobernanza."
+            },
+            {
+                title: "5. Institución Educativa / Escuela",
+                category: "EDUCACIÓN Y DESARROLLO INTEGRAL",
+                coords: [6.460000, -75.556000],
+                image: "colegio 5.jpg",
+                description: "Espacio fundamental para la formación, la integración comunitaria y el desarrollo integral de la juventud de San Pedro.",
+                meta: "Enfoque: Derecho a la educación y desarrollo de capacidades."
+            },
+            {
+                title: "6. Centro Comunitario / Encuentro Ciudadano",
+                category: "PARTICIPACIÓN Y COMUNIDAD",
+                coords: [6.459000, -75.554000],
+                image: "junta comunal 6.jpg",
+                description: "Escenario clave para la participación ciudadana, talleres, diálogo social y articulación de iniciativas comunales.",
+                meta: "Enfoque: Cohesión social y participación ciudadana."
+            }
+        ];
 
-    <!-- 4. Alcaldía Municipal -->
-    <div class="card">
-      <img src="image_7c9863.jpg" alt="Alcaldía Municipal de San Pedro de los Milagros">
-      <div class="card-content">
-        <div class="card-title">4. Alcaldía Municipal (Gestión e Institucionalidad)</div>
-        <div class="card-text">
-          Centro de la gestión pública local e infraestructura gubernamental enfocada en velar por el desarrollo y los derechos de los ciudadanos.
-        </div>
-      </div>
-    </div>
+        let currentIndex = 0;
+        const map = L.map('map', { zoomControl: false }).setView(points[0].coords, 16);
+        L.control.zoom({ position: 'topright' }).addTo(map);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-    <!-- 5. Institución Educativa -->
-    <div class="card">
-      <img src="image_7c98fe.jpg" alt="Institución Educativa">
-      <div class="card-content">
-        <div class="card-title">5. Institución Educativa / Escuela</div>
-        <div class="card-text">
-          Espacio fundamental para la formación, la integración comunitaria y el desarrollo integral de la juventud de San Pedro.
-        </div>
-      </div>
-    </div>
+        const markers = points.map((p, index) => {
+            const marker = L.marker(p.coords).addTo(map);
+            marker.bindPopup(`<b>${p.title}</b>`);
+            marker.on('click', () => selectPoint(index));
+            return marker;
+        });
 
-    <!-- 6. Centro Comunitario -->
-    <div class="card">
-      <img src="image_7c9c7f.jpg" alt="Centro Comunitario">
-      <div class="card-content">
-        <div class="card-title">6. Centro Comunitario / Encuentro Ciudadano</div>
-        <div class="card-text">
-          Escenario clave para la participación ciudadana, talleres, diálogo social y articulación de iniciativas comunales.
-        </div>
-      </div>
-    </div>
+        function selectPoint(index) {
+            currentIndex = index;
+            const p = points[index];
+            map.flyTo(p.coords, 16, { duration: 1.2 });
+            document.getElementById('card-category').innerText = p.category;
+            document.getElementById('card-title').innerText = p.title;
+            document.getElementById('card-image').src = p.image;
+            document.getElementById('card-desc').innerText = p.description;
+            document.getElementById('card-meta').innerText = p.meta;
+            document.getElementById('point-counter').innerText = `Punto ${index + 1} de ${points.length}`;
+            document.getElementById('prev-btn').disabled = (index === 0);
+            document.getElementById('next-btn').disabled = (index === points.length - 1);
+            markers[index].openPopup();
+        }
 
-  </div>
+        function changePoint(direction) {
+            let newIndex = currentIndex + direction;
+            if (newIndex >= 0 && newIndex < points.length) { selectPoint(newIndex); }
+        }
 
+        selectPoint(0);
+    </script>
 </body>
 </html>
