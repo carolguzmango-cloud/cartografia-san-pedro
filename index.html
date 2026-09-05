@@ -65,7 +65,7 @@
                 title: "1. Parque Principal y Basílica Señor de los Milagros",
                 category: "PATRIMONIO / COHESIÓN SOCIAL",
                 coords: [6.460833, -75.555000],
-                image: "basilica%202.jpg",
+                image: "basilica 2.jpg",
                 description: "Representa el corazón cultural, religioso y el espacio público de encuentro socio-espacial más representativo del municipio.",
                 meta: "Enfoque: Derecho a la identidad cultural, reunión pacífica y desarrollo comunitario."
             },
@@ -73,7 +73,7 @@
                 title: "2. Vía Principal de Acceso (Conectividad y Movilidad)",
                 category: "MOVILIDAD Y CONECTIVIDAD",
                 coords: [6.463000, -75.553500],
-                image: "via%201.png",
+                image: "via 1.png",
                 description: "La carretera principal de acceso representa la infraestructura básica que conecta a San Pedro de los Milagros con la subregión del Valle de Aburrá. Mantener la vía en condiciones óptimas es un requisito fundamental para garantizar la libre movilidad, el transporte de insumos médicos y alimentarios, y el ejercicio pleno del derecho al trabajo de la población campesina.",
                 meta: "Enfoque: Libre circulación, conectividad territorial y acceso a servicios."
             },
@@ -81,7 +81,7 @@
                 title: "3. Zona Rural, Veredas y Fincas Lecheras",
                 category: "DESARROLLO RURAL Y ECONOMÍA LOCAL",
                 coords: [6.472000, -75.545000],
-                image: "fincas%203.jpg",
+                image: "fincas 3.jpg",
                 description: "Espacio productivo y territorial fundamental para la economía local, el trabajo campesino y la seguridad alimentaria de la región.",
                 meta: "Enfoque: Soberanía alimentaria, desarrollo rural y trabajo digno."
             },
@@ -89,7 +89,7 @@
                 title: "4. Alcaldía Municipal (Gestión e Institucionalidad)",
                 category: "INSTITUCIONALIDAD Y PARTICIPACIÓN",
                 coords: [6.461200, -75.555500],
-                image: "comunal%204.jpg",
+                image: "comunal 4.jpg",
                 description: "Centro de la gestión pública local e infraestructura gubernamental enfocada en velar por el desarrollo y los derechos de los ciudadanos.",
                 meta: "Enfoque: ODS 16 - Instituciones sólidas, transparencia y gobernanza."
             },
@@ -97,7 +97,7 @@
                 title: "5. Institución Educativa / Escuela",
                 category: "EDUCACIÓN Y DESARROLLO INTEGRAL",
                 coords: [6.460000, -75.556000],
-                image: "colegio%205.jpg",
+                image: "colegio 5.jpg",
                 description: "Espacio fundamental para la formación, la integración comunitaria y el desarrollo integral de la juventud de San Pedro.",
                 meta: "Enfoque: Derecho a la educación y desarrollo de capacidades."
             },
@@ -105,7 +105,7 @@
                 title: "6. Centro Comunitario / Encuentro Ciudadano",
                 category: "PARTICIPACIÓN Y COMUNIDAD",
                 coords: [6.459000, -75.554000],
-                image: "junta%20comunal%206.jpg",
+                image: "junta comunal 6.jpg",
                 description: "Escenario clave para la participación ciudadana, talleres, diálogo social y articulación de iniciativas comunales.",
                 meta: "Enfoque: Cohesión social y participación ciudadana."
             }
@@ -133,7 +133,7 @@
             map.flyTo(p.coords, 16, { duration: 1.2 });
             document.getElementById('card-category').innerText = p.category;
             document.getElementById('card-title').innerText = p.title;
-            document.getElementById('card-image').src = p.image;
+            document.getElementById('card-image').src = encodeURIComponent(p.image);
             document.getElementById('card-desc').innerText = p.description;
             document.getElementById('card-meta').innerText = p.meta;
             document.getElementById('point-counter').innerText = `Punto ${index + 1} de ${points.length}`;
